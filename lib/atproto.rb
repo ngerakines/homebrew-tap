@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
+require "json"
+require "net/http"
+require "uri"
+
 # ATProto helper module for Homebrew formulas.
 #
 # Provides utilities for working with ATProto blob CIDs:
 # - Decoding SHA-256 checksums directly from CIDv1 identifiers
 # - Constructing blob download URLs via the XRPC getBlob endpoint
+# - Fetching distribution records and resolving platform artifacts
 module Atproto
   # RFC 4648 base32 alphabet (case-insensitive, we normalize to uppercase).
   BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
@@ -95,6 +100,52 @@ module Atproto
   # @param pds [String] the PDS base URL (default: pds.cauda.cloud)
   # @return [String] the full getBlob URL
   def self.blob_url(did, cid, pds: "https://pds.cauda.cloud")
-    "#{pds}/xrpc/com.atproto.sync.getBlob?did=#{did}&cid=#{cid}"
+    params = URI.encode_www_form(did: did, cid: cid)
+    "#{pds}/xrpc/com.atproto.sync.getBlob?#{params}"
+  end
+
+  # Fetch a record from an ATProto PDS via the getRecord XRPC endpoint.
+  #
+  # @param did [String] the repo DID
+  # @param collection [String] the collection NSID
+  # @param rkey [String] the record key
+  # @param cid [String, nil] optional CID to pin to a specific record version
+  # @param pds [String] the PDS base URL (default: pds.cauda.cloud)
+  # @return [Hash] the parsed JSON response
+  def self.get_record(did, collection, rkey, cid: nil, pds: "https://pds.cauda.cloud")
+    query = { repo: did, collection: collection, rkey: rkey }
+    query[:cid] = cid if cid
+    uri = URI("#{pds}/xrpc/com.atproto.repo.getRecord?#{URI.encode_www_form(query)}")
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.open_timeout = 10
+    http.read_timeout = 10
+
+    response = http.request(Net::HTTP::Get.new(uri))
+    raise "Failed to fetch record from #{uri}: HTTP #{response.code}" unless response.code == "200"
+
+    JSON.parse(response.body)
+  end
+
+  # Find an artifact in a distribution record matching the given tags.
+  #
+  # @param record [Hash] a parsed getRecord response for a distribution
+  # @param tags [Array<String>] tags to match (e.g. "arm64", "darwin")
+  # @return [Hash] the matching artifact
+  def self.find_artifact(record, *tags)
+    artifacts = record["value"]["artifacts"]
+    match = artifacts.find { |a| tags.all? { |t| a["tags"]&.include?(t) } }
+    raise "No artifact found matching tags: #{tags.join(", ")}" unless match
+
+    match
+  end
+
+  # Extract the blob CID from a distribution artifact's download reference.
+  #
+  # @param artifact [Hash] an artifact from a distribution record
+  # @return [String] the blob CID
+  def self.blob_cid_from_artifact(artifact)
+    artifact["download"]["ref"]["$link"]
   end
 end

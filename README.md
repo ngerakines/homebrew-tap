@@ -19,18 +19,19 @@ brew install atpcid
 
 Binaries are hosted on ATProto PDS blob storage at `pds.cauda.cloud`, not GitHub Releases. Each binary is uploaded as a blob and referenced by a content-addressed CID.
 
-The `lib/atproto.rb` helper module decodes the SHA-256 checksum directly from the blob CID — ATProto blob CIDs with the `bafkrei` prefix encode a SHA-256 hash using CIDv1 with raw codec and sha2-256 multihash. This means only the CID needs to be tracked per architecture; the download URL and checksum are both derived from it.
+The formula resolves binaries through a two-step process:
 
-Release metadata is stored as an ATProto record:
+1. **Distribution record** — The formula fetches a `garden.lexicon.exultant-zebra.distribution` record from the PDS via `com.atproto.repo.getRecord`. This record contains the version string and a list of artifacts, each tagged by platform (e.g. `arm64`, `darwin`). The request is pinned to a specific record CID for determinism.
 
-```
-https://pds.cauda.cloud/xrpc/com.atproto.repo.getRecord?repo=did:plc:cbkjy5n7bk3ax2wplmtjofq2&collection=dev.ngerakines.app&rkey=3mff5brrbbl2i
-```
+2. **Artifact resolution** — The formula matches the current platform's tags against the distribution's artifacts to find the correct blob CID, then derives the download URL and SHA-256 checksum from it.
+
+The `lib/atproto.rb` helper module decodes the SHA-256 checksum directly from the blob CID — ATProto blob CIDs with the `bafkrei` prefix encode a SHA-256 hash using CIDv1 with raw codec and sha2-256 multihash. This means only the distribution record reference needs to be tracked; download URLs and checksums for all platforms are derived from it.
 
 ## Updating the formula
 
 When a new version is released:
 
-1. Update the `version` string in `Formula/atpcid.rb`.
-2. Replace the CID string in the relevant architecture block with the new blob CID.
-3. The SHA-256 checksum and download URL are derived automatically from the CID.
+1. Publish an updated `garden.lexicon.exultant-zebra.distribution` record to the PDS with the new version and artifact blob CIDs.
+2. Update the `RECORD_CID` constant in `Formula/atpcid.rb` to the new record's CID.
+3. Update the `RKEY` constant if a new record key is used.
+4. The version, download URLs, and SHA-256 checksums are all derived automatically from the distribution record.
