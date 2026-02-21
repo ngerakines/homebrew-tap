@@ -4,6 +4,11 @@ require_relative "../lib/atproto"
 
 class Atpcid < Formula
   DID = "did:plc:cbkjy5n7bk3ax2wplmtjofq2"
+  COLLECTION = "garden.lexicon.exultant-zebra.distribution"
+  RKEY = "3mffgfbwq5l2i"
+  RECORD_CID = "bafyreig22ce5yzyuvrbijgjeqtry67pel7qqxakareo7fqht7ablatqznq"
+
+  DISTRIBUTION = Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
 
   desc "CID resolver for the AT Protocol"
   homepage "https://github.com/ngerakines/atproto-rs"
@@ -12,7 +17,29 @@ class Atpcid < Formula
 
   on_macos do
     on_arm do
-      cid = "bafkreidnh3ed7slspijcy5yipzlza25br5jkoctehgxfbtvphoksevdwyq"
+      artifact = Atproto.find_artifact(DISTRIBUTION, "arm64", "darwin")
+      cid = Atproto.blob_cid_from_artifact(artifact)
+      url Atproto.blob_url(DID, cid)
+      sha256 Atproto.sha256_from_cid(cid)
+    end
+    on_intel do
+      artifact = Atproto.find_artifact(DISTRIBUTION, "amd64", "darwin")
+      cid = Atproto.blob_cid_from_artifact(artifact)
+      url Atproto.blob_url(DID, cid)
+      sha256 Atproto.sha256_from_cid(cid)
+    end
+  end
+
+  on_linux do
+    on_arm do
+      artifact = Atproto.find_artifact(DISTRIBUTION, "arm64", "linux")
+      cid = Atproto.blob_cid_from_artifact(artifact)
+      url Atproto.blob_url(DID, cid)
+      sha256 Atproto.sha256_from_cid(cid)
+    end
+    on_intel do
+      artifact = Atproto.find_artifact(DISTRIBUTION, "amd64", "linux")
+      cid = Atproto.blob_cid_from_artifact(artifact)
       url Atproto.blob_url(DID, cid)
       sha256 Atproto.sha256_from_cid(cid)
     end
