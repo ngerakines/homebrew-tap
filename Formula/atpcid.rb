@@ -26,6 +26,6 @@ class Atpcid < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/atpcid --version", 0)
+    assert_match version.to_s, shell_output("#{bin}/atpcid --version")
   end
 end
