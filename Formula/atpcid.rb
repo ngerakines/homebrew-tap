@@ -5,8 +5,8 @@ require_relative "../lib/atproto"
 class Atpcid < Formula
   DID = "did:plc:cbkjy5n7bk3ax2wplmtjofq2"
   COLLECTION = "garden.lexicon.exultant-zebra.distribution"
-  RKEY = "3mglthdlrtv2i"
-  RECORD_CID = "bafyreieqhrgo7ylcljjtqaigz7pjmxekb42awsn55sxesnd56tatszh2pe"
+  RKEY = "3mgltnf5lyn2i"
+  RECORD_CID = "bafyreib7ew4hzlv7uhfucpmjjeu5h7x5yoww2y2znly5arz2lst3dwdmpu"
 
   DISTRIBUTION = Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
 
