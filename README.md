@@ -1,18 +1,28 @@
 # homebrew-tap
 
-Homebrew tap for [atpcid](https://github.com/ngerakines/atproto-rs), a CID resolver for the AT Protocol.
+Homebrew tap for AT Protocol CLI tools from [atproto-crates](https://tangled.org/ngerakines.me/atproto-crates).
+
+| Formula | Description |
+|---------|-------------|
+| `atpcid` | CID resolver for the AT Protocol |
+| `atpmcp` | MCP server for the AT Protocol |
+| `atptid` | An ATProtocol TID generator and parser |
+| `atpxrpc` | XRPC client for the AT Protocol |
 
 ## Install
 
 ```sh
-brew install ngerakines/tap/atpcid
+brew tap ngerakines/tap
+brew install atpcid atpmcp atptid atpxrpc
 ```
 
-Or add the tap first:
+Or install individually:
 
 ```sh
-brew tap ngerakines/tap
-brew install atpcid
+brew install ngerakines/tap/atpcid
+brew install ngerakines/tap/atpmcp
+brew install ngerakines/tap/atptid
+brew install ngerakines/tap/atpxrpc
 ```
 
 ## How it works
@@ -32,6 +42,6 @@ The `lib/atproto.rb` helper module decodes the SHA-256 checksum directly from th
 When a new version is released:
 
 1. Publish an updated `garden.lexicon.exultant-zebra.distribution` record to the PDS with the new version and artifact blob CIDs.
-2. Update the `RECORD_CID` constant in `Formula/atpcid.rb` to the new record's CID.
+2. Update the `RECORD_CID` constant in the relevant formula to the new record's CID.
 3. Update the `RKEY` constant if a new record key is used.
 4. The version, download URLs, and SHA-256 checksums are all derived automatically from the distribution record.
