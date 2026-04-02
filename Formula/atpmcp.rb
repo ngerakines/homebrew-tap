@@ -8,7 +8,9 @@ class Atpmcp < Formula
   RKEY = "3mijix6foqq2c"
   RECORD_CID = "bafyreiclgfg2vcuvz7hxgsttw7se4rxdvkpblfudcov5pwggjylsv244u4"
 
-  DISTRIBUTION = Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
+  def self.distribution
+    @distribution ||= Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
+  end
 
   desc "MCP server for the AT Protocol"
   homepage "https://tangled.org/ngerakines.me/atproto-crates"
@@ -17,13 +19,13 @@ class Atpmcp < Formula
 
   on_macos do
     on_arm do
-      artifact = Atproto.find_artifact(DISTRIBUTION, "arm64", "darwin")
+      artifact = Atproto.find_artifact(Atpmcp.distribution, "arm64", "darwin")
       cid = Atproto.blob_cid_from_artifact(artifact)
       url Atproto.blob_url(DID, cid)
       sha256 Atproto.sha256_from_cid(cid)
     end
     on_intel do
-      artifact = Atproto.find_artifact(DISTRIBUTION, "amd64", "darwin")
+      artifact = Atproto.find_artifact(Atpmcp.distribution, "amd64", "darwin")
       cid = Atproto.blob_cid_from_artifact(artifact)
       url Atproto.blob_url(DID, cid)
       sha256 Atproto.sha256_from_cid(cid)
@@ -32,13 +34,13 @@ class Atpmcp < Formula
 
   on_linux do
     on_arm do
-      artifact = Atproto.find_artifact(DISTRIBUTION, "arm64", "linux")
+      artifact = Atproto.find_artifact(Atpmcp.distribution, "arm64", "linux")
       cid = Atproto.blob_cid_from_artifact(artifact)
       url Atproto.blob_url(DID, cid)
       sha256 Atproto.sha256_from_cid(cid)
     end
     on_intel do
-      artifact = Atproto.find_artifact(DISTRIBUTION, "amd64", "linux")
+      artifact = Atproto.find_artifact(Atpmcp.distribution, "amd64", "linux")
       cid = Atproto.blob_cid_from_artifact(artifact)
       url Atproto.blob_url(DID, cid)
       sha256 Atproto.sha256_from_cid(cid)

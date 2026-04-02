@@ -8,7 +8,9 @@ class Atptid < Formula
   RKEY = "3mijixeitui2c"
   RECORD_CID = "bafyreig4ngf6kov2mo2dp7gb63gesvps4efysoe4vlf7fmjak5w56n3t5m"
 
-  DISTRIBUTION = Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
+  def self.distribution
+    @distribution ||= Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
+  end
 
   desc "An ATProtocol TID generator and parser"
   homepage "https://tangled.org/ngerakines.me/atproto-crates"
@@ -17,13 +19,13 @@ class Atptid < Formula
 
   on_macos do
     on_arm do
-      artifact = Atproto.find_artifact(DISTRIBUTION, "arm64", "darwin")
+      artifact = Atproto.find_artifact(Atptid.distribution, "arm64", "darwin")
       cid = Atproto.blob_cid_from_artifact(artifact)
       url Atproto.blob_url(DID, cid)
       sha256 Atproto.sha256_from_cid(cid)
     end
     on_intel do
-      artifact = Atproto.find_artifact(DISTRIBUTION, "amd64", "darwin")
+      artifact = Atproto.find_artifact(Atptid.distribution, "amd64", "darwin")
       cid = Atproto.blob_cid_from_artifact(artifact)
       url Atproto.blob_url(DID, cid)
       sha256 Atproto.sha256_from_cid(cid)
@@ -32,13 +34,13 @@ class Atptid < Formula
 
   on_linux do
     on_arm do
-      artifact = Atproto.find_artifact(DISTRIBUTION, "arm64", "linux")
+      artifact = Atproto.find_artifact(Atptid.distribution, "arm64", "linux")
       cid = Atproto.blob_cid_from_artifact(artifact)
       url Atproto.blob_url(DID, cid)
       sha256 Atproto.sha256_from_cid(cid)
     end
     on_intel do
-      artifact = Atproto.find_artifact(DISTRIBUTION, "amd64", "linux")
+      artifact = Atproto.find_artifact(Atptid.distribution, "amd64", "linux")
       cid = Atproto.blob_cid_from_artifact(artifact)
       url Atproto.blob_url(DID, cid)
       sha256 Atproto.sha256_from_cid(cid)
