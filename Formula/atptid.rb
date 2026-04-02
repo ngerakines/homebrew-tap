@@ -12,7 +12,7 @@ class Atptid < Formula
     @distribution ||= Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
   end
 
-  desc "An ATProtocol TID generator and parser"
+  desc "ATProtocol TID generator and parser"
   homepage "https://tangled.org/ngerakines.me/atproto-crates"
   version "0.14.5"
   license "MIT"

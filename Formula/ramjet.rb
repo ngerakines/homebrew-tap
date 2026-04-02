@@ -12,7 +12,7 @@ class Ramjet < Formula
     @distribution ||= Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
   end
 
-  desc "A relay consumer with configurable forward and track collections and record reconciliation"
+  desc "Relay consumer with collection forwarding and record reconciliation"
   homepage "https://tangled.org/ngerakines.me/ramjet"
   version "0.1.1"
   license "MIT"
