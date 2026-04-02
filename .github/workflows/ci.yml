@@ -12,5 +12,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: homebrew/actions/setup-homebrew@master
-      - run: brew style Formula/atpcid.rb
-      - run: brew audit --formula atpcid
+      - run: brew style Formula/
+      - run: brew audit --formula atpcid atpmcp atptid atpxrpc ramjet
