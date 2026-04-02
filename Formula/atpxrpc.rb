@@ -5,14 +5,14 @@ require_relative "../lib/atproto"
 class Atpxrpc < Formula
   DID = "did:plc:cbkjy5n7bk3ax2wplmtjofq2"
   COLLECTION = "garden.lexicon.exultant-zebra.distribution"
-  RKEY = "3mgpke635qf2i"
-  RECORD_CID = "bafyreifiybtpzvfyudqbybwacgsyvd5j236acxpvy4egeazm3s4g56d3wy"
+  RKEY = "3mijixmkotq2c"
+  RECORD_CID = "bafyreibctzc6qeujhpnjwap62imfr7zntshbx6lwhpemrf4stwcnowqbue"
 
   DISTRIBUTION = Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
 
   desc "XRPC client for the AT Protocol"
   homepage "https://tangled.org/ngerakines.me/atproto-crates"
-  version "0.14.2"
+  version "0.14.5"
   license "MIT"
 
   on_macos do

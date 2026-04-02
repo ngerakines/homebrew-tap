@@ -5,14 +5,14 @@ require_relative "../lib/atproto"
 class Atptid < Formula
   DID = "did:plc:cbkjy5n7bk3ax2wplmtjofq2"
   COLLECTION = "garden.lexicon.exultant-zebra.distribution"
-  RKEY = "3mgpkgbj7e52i"
-  RECORD_CID = "bafyreici2tlhmaxp3hluitoid63zv5mfzij6x64crmfubnus33wfup4kj4"
+  RKEY = "3mijixeitui2c"
+  RECORD_CID = "bafyreig4ngf6kov2mo2dp7gb63gesvps4efysoe4vlf7fmjak5w56n3t5m"
 
   DISTRIBUTION = Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
 
   desc "An ATProtocol TID generator and parser"
   homepage "https://tangled.org/ngerakines.me/atproto-crates"
-  version "0.14.2"
+  version "0.14.5"
   license "MIT"
 
   on_macos do

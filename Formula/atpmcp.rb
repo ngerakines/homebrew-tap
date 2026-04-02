@@ -5,14 +5,14 @@ require_relative "../lib/atproto"
 class Atpmcp < Formula
   DID = "did:plc:cbkjy5n7bk3ax2wplmtjofq2"
   COLLECTION = "garden.lexicon.exultant-zebra.distribution"
-  RKEY = "3mgpkdfzfvn2i"
-  RECORD_CID = "bafyreibn7m3xoy4zrqdc3zcqrxbrupgtwf63zlut2f6a3pqlqkhkoyrgfq"
+  RKEY = "3mijix6foqq2c"
+  RECORD_CID = "bafyreiclgfg2vcuvz7hxgsttw7se4rxdvkpblfudcov5pwggjylsv244u4"
 
   DISTRIBUTION = Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
 
   desc "MCP server for the AT Protocol"
   homepage "https://tangled.org/ngerakines.me/atproto-crates"
-  version "0.14.2"
+  version "0.14.5"
   license "MIT"
 
   on_macos do

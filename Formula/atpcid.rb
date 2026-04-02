@@ -5,14 +5,14 @@ require_relative "../lib/atproto"
 class Atpcid < Formula
   DID = "did:plc:cbkjy5n7bk3ax2wplmtjofq2"
   COLLECTION = "garden.lexicon.exultant-zebra.distribution"
-  RKEY = "3mgpkfkmowf2i"
-  RECORD_CID = "bafyreihpoeetjs37f7g4nlwdi5gnzqejkfzka6en3rmhvbaanhoqsrud34"
+  RKEY = "3mijiwunapa2c"
+  RECORD_CID = "bafyreiebx5wqqa7ffsbut4gzei7d6ox5km6ct2igse4ynjpdwdxbwo4qx4"
 
   DISTRIBUTION = Atproto.get_record(DID, COLLECTION, RKEY, cid: RECORD_CID).freeze
 
   desc "CID resolver for the AT Protocol"
   homepage "https://tangled.org/ngerakines.me/atproto-crates"
-  version "0.14.2"
+  version "0.14.5"
   license "MIT"
 
   on_macos do
